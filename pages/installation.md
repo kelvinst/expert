@@ -75,6 +75,7 @@ appropriate binary name.
 1. [Vanilla Emacs with lsp-mode](#vanilla-emacs-with-lsp-mode)
 2. [Vanilla Emacs with eglot](#vanilla-emacs-with-eglot)
 3. [Visual Studio Code](#visual-studio-code)
+3. [Cursor](#cursor)
 4. [neovim](#neovim)
 7. [Vim + Vim-LSP](#vim--vim-lsp)
 8. [Helix](#helix)
@@ -160,6 +161,11 @@ use the Expert executable instead.
 To change to a local executable, go to `Settings -> Extensions -> Lexical` and
 type `/my/home/projects/expert/apps/expert/burrito_out/expert_linux_amd64` into the text box in
 the `Server: Release path override` section.
+
+### Cursor
+
+As Cursor is basically a VS Code wrapper, just follow the [Visual Studio Code](#visual-studio-code)
+instructions above from inside Cursor editor.
 
 ### Neovim
 
