@@ -153,7 +153,7 @@ for Eglot:
 ### Visual Studio Code
 
 To use `expert` on VSCode (and all the other editors based on it) it's possible to use the `lexical` extension. 
-This is a stop gap until we create a dedicated Expert extension, so you'll need to configure it to
+This is a stopgap until we create a dedicated Expert extension, so you'll need to configure it to
 use the Expert executable instead. Follow these steps to configure it:
 
 1. Build the `expert` binary as described [above](#installation).
