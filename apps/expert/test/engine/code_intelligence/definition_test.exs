@@ -184,7 +184,7 @@ defmodule Expert.Engine.CodeIntelligence.DefinitionTest do
     test "find the definition of a remote macro call",
          %{project: project, uri: referenced_uri} do
       subject_module = ~q[
-        defmodule UsesRemoteFunction do
+        defmodule UsesRemoteMacro do
           import MyDefinition
 
           def uses_macro() do
