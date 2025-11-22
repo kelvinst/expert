@@ -152,20 +152,40 @@ for Eglot:
 
 ### Visual Studio Code
 
-Click on the extensions button on the sidebar, then search for
-`lexical`, then click `install`.
-
+To use `expert` on VSCode (and all the other editors based on it) it's possible to use the `lexical` extension. 
 This is a stop gap until we create a dedicated Expert extension, so you'll need to configure it to
-use the Expert executable instead. 
+use the Expert executable instead. Follow these steps to configure it:
 
-To change to a local executable, go to `Settings -> Extensions -> Lexical` and
-type `/my/home/projects/expert/apps/expert/burrito_out/expert_linux_amd64` into the text box in
-the `Server: Release path override` section.
+1. Build the `expert` binary as described [above](#installation).
+1. Create a `start_lexical.sh` script in the `/my/home/projects/expert/apps/expert/burrito_out` directory with the following content:
+
+  ```bash
+  #!/bin/bash
+  /my/home/projects/expert/apps/expert/burrito_out/expert_linux_amd64 --stdio
+  ```
+
+  PS1.: Change `expert_linux_amd64` to match your OS and architecture.
+  PS2.: You might need to set your `PATH` variable in this script to include the `elixir` and `erl` binaries depending on your setup,
+  as VSCode does not inherit your shell's environment variables when executing this script from `lexical` extension.
+
+1. Make the script executable:
+
+```bash
+chmod +x /my/home/projects/expert/apps/expert/burrito_out/start_lexical.sh
+```
+
+1. Open Lexical settings on `Settings -> Extensions -> Lexical` and set `Server: Path to server script` to point 
+to `/my/home/projects/expert/apps/expert/burrito_out` folder (Lexical extension will look for the `start_lexical.sh` 
+script inside this folder automatically).
+
+You are good to go! To make sure everything is working, open an Elixir file and check the Output view (`View -> Output`) and 
+select `Lexical` on the panel title dropdown. You should see logs from Lexical extension starting the Expert language server. 
+Also, `expert` creates a `.expert` folder in your home directory where it stores logs and other data, so you can check there as well.
 
 ### Cursor
 
 As Cursor is basically a VS Code wrapper, just follow the [Visual Studio Code](#visual-studio-code)
-instructions above from inside Cursor editor.
+instructions above and you will be good to go with it too.
 
 ### Neovim
 
