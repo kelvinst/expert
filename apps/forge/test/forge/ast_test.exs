@@ -54,6 +54,28 @@ defmodule Forge.AstTest do
              }
     end
 
+    test "returns the surrounding context of a local call" do
+      text = ~q[
+        defmodule Foo do
+          def bar do
+            :ok
+          end
+
+          def baz do
+            ba|r()
+          end
+        end
+      ]
+
+      assert {:ok, surround_context} = surround_context(text)
+
+      assert surround_context == %{
+               context: {:local_call, ~c"bar"},
+               begin: {7, 5},
+               end: {7, 8}
+             }
+    end
+
     test "returns the surrounding context of a dot function call from inside a sigil" do
       text = ~q[
         defmodule Foo do
