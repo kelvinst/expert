@@ -95,6 +95,26 @@ defmodule Forge.AstTest do
                end: {4, 17}
              }
     end
+
+    test "returns the surrounding context of a imported function call from inside a sigil" do
+      text = ~q[
+        defmodule Foo do
+          def bar do
+            ~H"""
+            <.w|orld />
+            """
+          end
+        end
+      ]
+
+      assert {:ok, surround_context} = surround_context(text)
+
+      assert surround_context == %{
+               context: {:local_call, ~c"world"},
+               begin: {4, 6},
+               end: {4, 11}
+             }
+    end
   end
 
   describe "cursor_path/2" do
