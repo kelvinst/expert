@@ -157,7 +157,7 @@ This is a stopgap until we create a dedicated Expert extension, so you'll need t
 use the Expert executable instead. Follow these steps to configure it:
 
 1. Build the `expert` binary as described [above](#installation).
-1. Create a `start_lexical.sh` script in the `/my/home/projects/expert/apps/expert/burrito_out` directory with the following content:
+2. Create a `start_lexical.sh` script in the `/my/home/projects/expert/apps/expert/burrito_out` directory with the following content:
 
   ```bash
   #!/bin/bash
@@ -167,13 +167,13 @@ use the Expert executable instead. Follow these steps to configure it:
   Note: You might need to set your `PATH` variable in this script to include the `elixir` and `erl` binaries depending on your setup,
   as VSCode does not inherit your shell's environment variables when executing this script from `lexical` extension.
 
-1. Make the script executable:
+3. Make the script executable:
 
   ```bash
   chmod +x /my/home/projects/expert/apps/expert/burrito_out/start_lexical.sh
   ```
 
-1. Open Lexical settings on `Settings -> Extensions -> Lexical` and set `Server: Path to server script` to point 
+4. Open Lexical settings on `Settings -> Extensions -> Lexical` and set `Server: Path to server script` to point 
 to `/my/home/projects/expert/apps/expert/burrito_out` folder (Lexical extension will look for the `start_lexical.sh` 
 script inside this folder automatically).
 
