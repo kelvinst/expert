@@ -164,8 +164,7 @@ use the Expert executable instead. Follow these steps to configure it:
   /my/home/projects/expert/apps/expert/burrito_out/expert_linux_amd64 --stdio
   ```
 
-  PS1.: Change `expert_linux_amd64` to match your OS and architecture.
-  PS2.: You might need to set your `PATH` variable in this script to include the `elixir` and `erl` binaries depending on your setup,
+  Note: You might need to set your `PATH` variable in this script to include the `elixir` and `erl` binaries depending on your setup,
   as VSCode does not inherit your shell's environment variables when executing this script from `lexical` extension.
 
 1. Make the script executable:
