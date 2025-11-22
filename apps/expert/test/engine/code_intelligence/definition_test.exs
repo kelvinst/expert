@@ -200,6 +200,26 @@ defmodule Expert.Engine.CodeIntelligence.DefinitionTest do
     end
   end
 
+  describe "definition/2 when making remote call by import on deps" do
+    test "find the definition of a remote function call", %{project: project, subject_uri: subject_uri} do
+      subject_module = ~q"""
+        defmodule UsesDepRemoteFunction do
+          import Jason, only: [encode!: 1]
+
+          def uses_encode!() do
+            enc|ode!(%{hello: "world"})
+          end
+        end
+      """
+
+      assert {:ok, referenced_uri, definition_line} =
+               definition(project, subject_module, subject_uri)
+
+      assert definition_line == ~S{  def «encode!»(input, opts \\ []) do}
+      assert referenced_uri =~ "deps/jason/lib/jason.ex"
+    end
+  end
+
   describe "definition/2 when making remote call by use to import definition" do
     setup [:with_referenced_file]
 
