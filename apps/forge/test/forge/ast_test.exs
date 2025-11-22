@@ -12,6 +12,69 @@ defmodule Forge.AstTest do
 
   use ExUnit.Case, async: true
 
+  describe "surround_context/2" do
+    defp surround_context(text) do
+      {position, document} = pop_cursor(text, as: :document)
+      Ast.surround_context(document, position)
+    end
+
+    test "returns the surrounding context of an atom" do
+      text = ~q[
+        defmodule Foo do
+          def bar do
+            :o|k
+          end
+        end
+      ]
+
+      assert {:ok, surround_context} = surround_context(text)
+
+      assert surround_context == %{
+               context: {:unquoted_atom, ~c"ok"},
+               begin: {3, 5},
+               end: {3, 8}
+             }
+    end
+
+    test "returns the surrounding context of a variable" do
+      text = ~q[
+        defmodule Foo do
+          def bar do
+            va|r = 1
+          end
+        end
+      ]
+
+      assert {:ok, surround_context} = surround_context(text)
+
+      assert surround_context == %{
+               context: {:local_or_var, ~c"var"},
+               begin: {3, 5},
+               end: {3, 8}
+             }
+    end
+
+    test "returns the surrounding context of a dot function call from inside a sigil" do
+      text = ~q[
+        defmodule Foo do
+          def bar do
+            ~H"""
+            <Hello.w|orld />
+            """
+          end
+        end
+      ]
+
+      assert {:ok, surround_context} = surround_context(text)
+
+      assert surround_context == %{
+               context: {:dot, {:alias, ~c"Hello"}, ~c"world"},
+               begin: {4, 6},
+               end: {4, 17}
+             }
+    end
+  end
+
   describe "cursor_path/2" do
     defp cursor_path(text) do
       {position, document} = pop_cursor(text, as: :document)
