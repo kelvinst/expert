@@ -75,12 +75,12 @@ appropriate binary name.
 1. [Vanilla Emacs with lsp-mode](#vanilla-emacs-with-lsp-mode)
 2. [Vanilla Emacs with eglot](#vanilla-emacs-with-eglot)
 3. [Visual Studio Code](#visual-studio-code)
-3. [Cursor](#cursor)
-4. [neovim](#neovim)
-7. [Vim + Vim-LSP](#vim--vim-lsp)
-8. [Helix](#helix)
-9. [Sublime Text](#sublime-text)
-10. [Zed](#zed)
+4. [Cursor](#cursor)
+5. [neovim](#neovim)
+6. [Vim + Vim-LSP](#vim--vim-lsp)
+7. [Helix](#helix)
+8. [Sublime Text](#sublime-text)
+9. [Zed](#zed)
 
 ### Vanilla Emacs with lsp-mode
 The emacs instructions assume you're using `use-package`, which you
