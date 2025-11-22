@@ -218,6 +218,24 @@ defmodule Expert.Engine.CodeIntelligence.DefinitionTest do
       assert definition_line == ~S{  def «encode!»(input, opts \\ []) do}
       assert referenced_uri =~ "deps/jason/lib/jason.ex"
     end
+
+    test "find the definition of a remote macro call", %{project: project, subject_uri: subject_uri} do
+      subject_module = ~q{
+        defmodule UsesDepRemoteMacro do
+          import Jason.Helpers, only: [json_map: 1]
+
+          def uses_json_map() do
+            json_m|ap(hello: "world")
+          end
+        end
+      }
+
+      assert {:ok, referenced_uri, definition_line} =
+               definition(project, subject_module, subject_uri)
+
+      assert definition_line == ~S[  defmacro «json_map»(kv) do]
+      assert referenced_uri =~ "deps/jason/lib/helpers.ex"
+    end
   end
 
   describe "definition/2 when making remote call by use to import definition" do
