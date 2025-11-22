@@ -169,9 +169,9 @@ use the Expert executable instead. Follow these steps to configure it:
 
 1. Make the script executable:
 
-```bash
-chmod +x /my/home/projects/expert/apps/expert/burrito_out/start_lexical.sh
-```
+  ```bash
+  chmod +x /my/home/projects/expert/apps/expert/burrito_out/start_lexical.sh
+  ```
 
 1. Open Lexical settings on `Settings -> Extensions -> Lexical` and set `Server: Path to server script` to point 
 to `/my/home/projects/expert/apps/expert/burrito_out` folder (Lexical extension will look for the `start_lexical.sh` 
