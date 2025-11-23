@@ -1,5 +1,6 @@
 defmodule Engine.CodeIntelligence.Definition do
   alias ElixirSense.Providers.Location, as: ElixirSenseLocation
+  alias Engine.CodeIntelligence.ElixirSource
   alias Engine.CodeIntelligence.Entity
   alias Engine.Search.Store
   alias Forge.Ast
@@ -85,7 +86,16 @@ defmodule Engine.CodeIntelligence.Definition do
       [] ->
         Logger.info("No definition found for #{inspect(resolved)} with Indexer.")
 
-        elixir_sense_definition(analysis, position)
+        # First try ElixirSense
+        case elixir_sense_definition(analysis, position) do
+          {:ok, nil} ->
+            # If ElixirSense doesn't find it, try our ElixirSource module
+            Logger.info("ElixirSense returned nil, trying ElixirSource for #{inspect(resolved)}")
+            elixir_source_definition(resolved)
+
+          result ->
+            result
+        end
 
       [location] ->
         {:ok, location}
@@ -180,4 +190,18 @@ defmodule Engine.CodeIntelligence.Definition do
         []
     end
   end
+
+  defp elixir_source_definition({:call, module, function, arity}) do
+    ElixirSource.find_definition(:call, module, function, arity)
+  end
+
+  defp elixir_source_definition({:module, module}) do
+    ElixirSource.find_definition(:module, module)
+  end
+
+  defp elixir_source_definition({:struct, module}) do
+    ElixirSource.find_definition(:module, module)
+  end
+
+  defp elixir_source_definition(_), do: {:ok, nil}
 end

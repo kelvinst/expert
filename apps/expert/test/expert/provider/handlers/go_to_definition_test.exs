@@ -77,18 +77,20 @@ defmodule Expert.Provider.Handlers.GoToDefinitionTest do
       assert Location.uri(location) == referenced_uri
     end
 
-    test "does not find built-in functions", %{project: project} do
+    test "finds built-in functions", %{project: project} do
       uses_file_path = file_path(project, Path.join("lib", "uses.ex"))
       {:ok, request} = build_request(uses_file_path, 8, 7)
 
-      {:ok, nil} = handle(request, project)
+      {:ok, %Location{} = location} = handle(request, project)
+      assert Location.uri(location) =~ "lib/elixir/lib/io.ex"
     end
 
-    test "does not find built-in modules", %{project: project} do
+    test "finds built-in modules", %{project: project} do
       uses_file_path = file_path(project, Path.join("lib", "uses.ex"))
       {:ok, request} = build_request(uses_file_path, 8, 4)
 
-      {:ok, nil} = handle(request, project)
+      {:ok, %Location{} = location} = handle(request, project)
+      assert Location.uri(location) =~ "lib/elixir/lib/io.ex"
     end
   end
 end

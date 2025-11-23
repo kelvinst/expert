@@ -373,11 +373,10 @@ defmodule Expert.Engine.CodeIntelligence.DefinitionTest do
     end
 
     @doc """
-    This is a limitation of the ElixirSense.
-    like the `subject_module` below, it can't find the correct definition of `String.to_integer/1`,
-    currently, it will always return `{:ok, nil}`
+    This test verifies that we can find definitions for Elixir standard library functions.
+    Previously, this was a limitation of ElixirSense which would return `{:ok, nil}`.
+    Now we use ElixirSource to parse the Elixir installation source files directly.
     """
-    @tag :skip
     test "find the definition when calling a Elixir std module function",
          %{project: project, subject_uri: subject_uri} do
       subject_module = ~q[
