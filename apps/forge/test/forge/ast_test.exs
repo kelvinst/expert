@@ -110,7 +110,7 @@ defmodule Forge.AstTest do
       assert {:ok, surround_context} = surround_context(text)
 
       assert surround_context == %{
-               context: {:local_call, ~c"world"},
+               context: {:local_heex_call, ~c"world"},
                begin: {4, 7},
                end: {4, 12}
              }
