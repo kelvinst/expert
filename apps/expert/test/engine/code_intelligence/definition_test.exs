@@ -290,6 +290,24 @@ defmodule Expert.Engine.CodeIntelligence.DefinitionTest do
       assert referenced_uri =~ "navigations/lib/my_module.ex"
     end
 
+    test "find the macro definition", %{project: project, subject_uri: subject_uri} do
+      subject_module = ~q[
+        defmodule UsesOwnFunction do
+          defmacro greet do
+          end
+
+          def uses_greet do
+            gree|t()
+          end
+        end
+      ]
+
+      {:ok, referenced_uri, definition_line} = definition(project, subject_module, subject_uri)
+
+      assert definition_line == ~S[  defmacro «greet» do]
+      assert referenced_uri =~ "navigations/lib/my_module.ex"
+    end
+
     test "find the function definition when the function has `when` clause", %{
       project: project,
       subject_uri: subject_uri
