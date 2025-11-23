@@ -111,8 +111,8 @@ defmodule Forge.AstTest do
 
       assert surround_context == %{
                context: {:local_call, ~c"world"},
-               begin: {4, 6},
-               end: {4, 11}
+               begin: {4, 7},
+               end: {4, 12}
              }
     end
   end

@@ -315,6 +315,10 @@ defmodule Future.Code.Fragment do
           _ -> {:none, 0}
         end
 
+      # Identify `<.` always as a local heex function component call
+      {:identifier, [?., ?< | _rest], acc, count} ->
+        {{:local_heex_call, acc}, count}
+
       {:identifier, rest, acc, count} ->
         case strip_spaces(rest, count) do
           {~c"." ++ rest, count} when rest == [] or hd(rest) != ?. ->
@@ -659,6 +663,9 @@ defmodule Future.Code.Fragment do
 
           {{:dot, _, [_ | _]} = dot, offset} ->
             build_surround(dot, reversed, line, offset)
+
+          {{:local_heex_call, acc}, offset} ->
+            build_surround({:local_heex_call, acc}, reversed, line, offset)
 
           {{:local_or_var, acc}, offset} when hd(rest) == ?( ->
             build_surround({:local_call, acc}, reversed, line, offset)
