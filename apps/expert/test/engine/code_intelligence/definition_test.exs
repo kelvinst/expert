@@ -223,6 +223,29 @@ defmodule Expert.Engine.CodeIntelligence.DefinitionTest do
     end
   end
 
+  describe "definition/2 when making remote heex component call by import" do
+    setup [:with_referenced_file]
+
+    test "find the definition of a remote heex component call", %{project: project, uri: referenced_uri} do
+      subject_module = ~q[
+        defmodule UsesPhoenixComponentFunction do
+          import MyDefinition
+
+          def uses_greet() do
+            ~H"""
+            <.gree|t />
+            """
+          end
+        end
+      ]
+
+      assert {:ok, ^referenced_uri, definition_line} =
+               definition(project, subject_module, referenced_uri)
+
+      assert definition_line == ~S[  def «greet(name)» do]
+    end
+  end
+
   describe "definition/2 when making remote call by use to import definition" do
     setup [:with_referenced_file]
 

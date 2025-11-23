@@ -161,6 +161,17 @@ defmodule Engine.CodeIntelligence.Entity do
     end
   end
 
+  defp resolve({:local_heex_call, fun_chars}, node_range, analysis, position) do
+    fun = List.to_atom(fun_chars)
+
+    module = case Engine.Analyzer.resolve_local_call(analysis, position, fun, 1) do
+      {module, ^fun, 1} -> module
+      _ -> current_module(analysis, position)
+    end
+
+    {:ok, {:call, module, fun, 1}, node_range}
+  end
+
   defp resolve({:unquoted_atom, _} = context, node_range, analysis, position) do
     case expand_alias(context, analysis, position) do
       {:ok, module} -> {:ok, {:module, module}, node_range}
