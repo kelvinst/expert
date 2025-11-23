@@ -292,7 +292,7 @@ defmodule Expert.Engine.CodeIntelligence.DefinitionTest do
 
     test "find the macro definition", %{project: project, subject_uri: subject_uri} do
       subject_module = ~q[
-        defmodule UsesOwnFunction do
+        defmodule UsesOwnMacro do
           defmacro greet do
           end
 
