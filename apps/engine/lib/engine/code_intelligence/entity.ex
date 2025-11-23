@@ -167,7 +167,6 @@ defmodule Engine.CodeIntelligence.Entity do
   defp resolve({:local_heex_call, fun_chars}, node_range, analysis, position) do
     fun = List.to_atom(fun_chars)
 
-    # We hardcode the fixed arity instead of trying to determine it from the AST.
     module =
       case Engine.Analyzer.resolve_local_call(analysis, position, fun, @heex_arity) do
         {module, ^fun, @heex_arity} -> module

@@ -315,7 +315,6 @@ defmodule Future.Code.Fragment do
           _ -> {:none, 0}
         end
 
-      # Identify `<.` always as a local heex function component call
       {:identifier, [?., ?< | _rest], acc, count} ->
         {{:local_heex_call, acc}, count}
 
