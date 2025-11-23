@@ -161,15 +161,20 @@ defmodule Engine.CodeIntelligence.Entity do
     end
   end
 
+  # HEEx function components always take exactly one parameter: the assigns map.
+  @heex_arity 1
+
   defp resolve({:local_heex_call, fun_chars}, node_range, analysis, position) do
     fun = List.to_atom(fun_chars)
 
-    module = case Engine.Analyzer.resolve_local_call(analysis, position, fun, 1) do
-      {module, ^fun, 1} -> module
-      _ -> current_module(analysis, position)
-    end
+    # We hardcode the fixed arity instead of trying to determine it from the AST.
+    module =
+      case Engine.Analyzer.resolve_local_call(analysis, position, fun, @heex_arity) do
+        {module, ^fun, @heex_arity} -> module
+        _ -> current_module(analysis, position)
+      end
 
-    {:ok, {:call, module, fun, 1}, node_range}
+    {:ok, {:call, module, fun, @heex_arity}, node_range}
   end
 
   defp resolve({:unquoted_atom, _} = context, node_range, analysis, position) do
