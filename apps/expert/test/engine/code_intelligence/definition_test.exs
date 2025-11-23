@@ -451,6 +451,34 @@ defmodule Expert.Engine.CodeIntelligence.DefinitionTest do
     end
   end
 
+  describe "definition/2 when making local call to a heex function component" do
+    test "find the definition of the local heex function component", %{
+      project: project,
+      subject_uri: subject_uri
+    } do
+      subject_module = ~q[
+        defmodule UsesLocalHeexComponentFunction do
+          def hello(assigns) do
+            ~H"""
+            Hello, World!
+            """
+          end
+
+          def render(assigns) do
+            ~H"""
+            <.hel|lo />
+            """
+          end
+        end
+      ]
+
+      {:ok, ^subject_uri, definition_line} =
+        definition(project, subject_module, subject_uri)
+
+      assert definition_line == ~S[  def «hello(assigns)» do]
+    end
+  end
+
   describe "definition/2 when making local call to a delegated function" do
     setup [:with_referenced_file]
 
