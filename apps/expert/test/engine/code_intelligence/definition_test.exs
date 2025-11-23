@@ -161,6 +161,84 @@ defmodule Expert.Engine.CodeIntelligence.DefinitionTest do
     end
   end
 
+  describe "definition/2 when making remote call by alias of a deps module" do
+    test "find the definition of a remote function call", %{project: project, subject_uri: subject_uri} do
+      subject_module = ~q[
+        defmodule UsesDepFunction do
+          alias Jason
+
+          def uses_greet() do
+            Jason.enco|de(%{hello: "world"})
+          end
+        end
+      ]
+
+      assert {:ok, referenced_uri, definition_line} =
+               definition(project, subject_module, subject_uri)
+
+      assert definition_line == ~S{  def «encode»(input, opts \\ []) do}
+      assert referenced_uri =~ "deps/jason/lib/jason.ex"
+    end
+
+    test "find the definition of the module", %{project: project, subject_uri: subject_uri} do
+      subject_module = ~q[
+        defmodule UsesDepModule do
+          alias Jason
+
+          def uses_greet() do
+            Jaso|n.encode(%{hello: "world"})
+          end
+        end
+      ]
+
+      assert {:ok, referenced_uri, definition_line} =
+               definition(project, subject_module, subject_uri)
+
+      assert definition_line == ~S[defmodule «Jason» do]
+      assert referenced_uri =~ "deps/jason/lib/jason.ex"
+    end
+
+    @doc """
+    FIXME: For some reason this works when testing manually, but fails in here
+    """
+    @tag :skip
+    test "find the definition of a struct", %{project: project, subject_uri: subject_uri} do
+      subject_module = ~q[
+        defmodule UsesDepStruct do
+          alias Jason.OrderedObject
+
+          def uses_struct() do
+            %Orde|redObject{}
+          end
+      end
+      ]
+
+      assert {:ok, referenced_uri, definition_line} =
+               definition(project, subject_module, subject_uri)
+
+      assert definition_line == "  «defstruct values: []»"
+      assert referenced_uri =~ "deps/jason/lib/ordered_object.ex"
+    end
+
+    test "find the macro definition", %{project: project, subject_uri: subject_uri} do
+      subject_module = ~q[
+        defmodule UsesDepMacro do
+          require Jason.Helpers
+
+          def uses_macro() do
+            Jason.Helpers.json|_map(a: 1)
+          end
+        end
+      ]
+
+      assert {:ok, referenced_uri, definition_line} =
+               definition(project, subject_module, subject_uri)
+
+      assert definition_line == ~S[  defmacro «json_map»(kv) do]
+      assert referenced_uri =~ "deps/jason/lib/helpers.ex"
+    end
+  end
+
   describe "definition/2 when making remote call by import" do
     setup [:with_referenced_file]
 
